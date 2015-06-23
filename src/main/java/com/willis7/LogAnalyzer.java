@@ -8,6 +8,10 @@ import org.apache.commons.lang3.StringUtils;
 public class LogAnalyzer {
 
     public boolean IsValidLogFileName(String fileName) {
+        if(StringUtils.isEmpty(fileName)) {
+            throw new IllegalArgumentException("Filename has to be provided");
+        }
+
         if(!StringUtils.endsWithIgnoreCase(fileName, ".SLF")) {
             return false;
         }
