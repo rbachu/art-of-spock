@@ -6,7 +6,7 @@ package com.willis7;
 public class LogAnalyzer {
 
     public boolean IsValidLogFileName(String fileName) {
-        if(fileName.endsWith(".SLF")) {
+        if(!fileName.endsWith(".SLF")) {
             return false;
         }
         return true;
