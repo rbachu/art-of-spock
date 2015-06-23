@@ -9,15 +9,15 @@ import spock.lang.Unroll
 class LogAnalyzerTest extends Specification {
 
     @Unroll
-    def "IsValidLogFileName input #value returns #expected"() {
+    def "IsValidLogFileName when called with #filename returns #expected"() {
         given:
         LogAnalyzer analyzer = MakeAnalyser()
 
         expect:
-        analyzer.IsValidLogFileName(value) == expected
+        analyzer.IsValidLogFileName(filename) == expected
 
         where:
-        value                       | expected
+        filename                    | expected
         "fileWithGoodExtension.SLF" | true
         "fileWithGoodExtension.slf" | true
         "fileWithBadExtension.foo"  | false
@@ -33,6 +33,21 @@ class LogAnalyzerTest extends Specification {
         then:
         def exception = thrown(IllegalArgumentException)
         exception.message == "Filename has to be provided"
+    }
+
+    @Unroll
+    def "IsValidLogFileName when called with #filename changes wasLastFileNameValid to #expected"() {
+        given:
+        LogAnalyzer analyzer = MakeAnalyser()
+        analyzer.IsValidLogFileName(filename)
+
+        expect:
+        analyzer.wasLastFileNameValid == expected
+
+        where:
+        filename       | expected
+        "goodfile.slf" | true
+        "badfile.foo"  | false
     }
 
     /**
