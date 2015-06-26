@@ -5,29 +5,14 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author Sion Williams
  */
-public class LogAnalyzer {
-    boolean wasLastFileNameValid;
+public class LogAnalyzer {;
+    private IExtensionManager manager;
 
-    public boolean isWasLastFileNameValid() {
-        return wasLastFileNameValid;
-    }
-
-    public void setWasLastFileNameValid(boolean wasLastFileNameValid) {
-        this.wasLastFileNameValid = wasLastFileNameValid;
+    public LogAnalyzer(IExtensionManager mgr) {
+        this.manager = mgr;
     }
 
     public boolean IsValidLogFileName(String fileName) {
-        // Changes the state of the system
-        wasLastFileNameValid = false;
-
-        if(StringUtils.isEmpty(fileName)) {
-            throw new IllegalArgumentException("Filename has to be provided");
-        }
-
-        if(!StringUtils.endsWithIgnoreCase(fileName, ".SLF")) {
-            return false;
-        }
-        wasLastFileNameValid = true;
-        return true;
+        return manager.isValid(fileName);
     }
 }

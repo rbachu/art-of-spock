@@ -7,54 +7,25 @@ import spock.lang.Unroll
  * @author Sion Williams
  */
 class LogAnalyzerTest extends Specification {
+    def "IsValidLogFileName name supported extension returns true"() {
+        given: "a stub setup to return true"
+        FakeExtensionManager fakeExtensionManager = new FakeExtensionManager();
+        fakeExtensionManager.willBeValid = true;
 
-    @Unroll
-    def "IsValidLogFileName when called with #filename returns #expected"() {
-        given:
-        LogAnalyzer analyzer = MakeAnalyser()
+        when: "we send in the stub"
+        LogAnalyzer logAnalyzer = new LogAnalyzer(fakeExtensionManager);
 
-        expect:
-        analyzer.IsValidLogFileName(filename) == expected
-
-        where:
-        filename                    | expected
-        "fileWithGoodExtension.SLF" | true
-        "fileWithGoodExtension.slf" | true
-        "fileWithBadExtension.foo"  | false
+        then: "the test asserts true"
+        logAnalyzer.IsValidLogFileName("short.ext")
     }
 
-    def "IsValidLogFileName empty filename throws exception"() {
-        given:
-        LogAnalyzer analyzer = MakeAnalyser()
+}
 
-        when:
-        analyzer.IsValidLogFileName(null)
-
-        then:
-        def exception = thrown(IllegalArgumentException)
-        exception.message == "Filename has to be provided"
-    }
-
-    @Unroll
-    def "IsValidLogFileName when called with #filename changes wasLastFileNameValid to #expected"() {
-        given:
-        LogAnalyzer analyzer = MakeAnalyser()
-        analyzer.IsValidLogFileName(filename)
-
-        expect:
-        analyzer.wasLastFileNameValid == expected
-
-        where:
-        filename       | expected
-        "goodfile.slf" | true
-        "badfile.foo"  | false
-    }
-
-    /**
-     * Factory method creates instances of LogAnalyzer
-     * @return LogAnalyzer
-     */
-    private LogAnalyzer MakeAnalyser() {
-        new LogAnalyzer()
+class FakeExtensionManager implements IExtensionManager {
+    public boolean willBeValid = false;
+    
+    @Override
+    boolean isValid(String fileName) {
+        return willBeValid;
     }
 }
